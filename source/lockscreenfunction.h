@@ -1,0 +1,2 @@
+BOOL isOnLockscreen();
+BOOL isUILocked();
