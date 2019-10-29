@@ -64,16 +64,20 @@ extern BOOL isUILocked();
         
         if (passcodeEnabled) { // Only have to snapshot apps if there's authentication enabled
             [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
-                if([(SpringBoard*)[UIApplication sharedApplication] _accessibilityFrontMostApplication] && !isUILocked()){
-                    SBMainSwitcherViewController *mainSwitcherCont = [objc_getClass("SBMainSwitcherViewController") sharedInstance];
-                    CGRect rect = [mainSwitcherCont.view bounds];
-                    CGSize viewSize = rect.size;
-                    UIGraphicsBeginImageContextWithOptions(viewSize, NO, 0.0);
-                    [mainSwitcherCont.view drawViewHierarchyInRect:CGRectMake(0, 0, viewSize.width, viewSize.height) afterScreenUpdates:YES];
-                    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-                    UIGraphicsEndImageContext();
-                    
-                    self.snapshotImageView.image = img;
+                if([(SpringBoard*)[UIApplication sharedApplication] _accessibilityFrontMostApplication]){
+                    if(!isUILocked()){
+                        SBMainSwitcherViewController *mainSwitcherCont = [objc_getClass("SBMainSwitcherViewController") sharedInstance];
+                        CGRect rect = [mainSwitcherCont.view bounds];
+                        CGSize viewSize = rect.size;
+                        UIGraphicsBeginImageContextWithOptions(viewSize, NO, 0.0);
+                        [mainSwitcherCont.view drawViewHierarchyInRect:CGRectMake(0, 0, viewSize.width, viewSize.height) afterScreenUpdates:YES];
+                        UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+                        UIGraphicsEndImageContext();
+                        
+                        self.snapshotImageView.image = img;
+                    }
+                } else {
+                    self.snapshotImageView.alpha = 0;
                 }
             }];
             
