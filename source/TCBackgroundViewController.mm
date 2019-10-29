@@ -4,6 +4,8 @@
 #import "TCBackgroundViewController.h"
 #import "_UIBackdropViewSettingsDynamic.h"
 
+@import LocalAuthentication;
+
 static BOOL alwaysBlurEnabled;
 
 //----------------------------------------------------------------
@@ -56,23 +58,39 @@ extern BOOL isUILocked();
             [self.view addSubview: self.snapshotImageView];
             [self.view sendSubviewToBack:self.snapshotImageView];
         }
+        LAContext *context = [LAContext new];
+        NSError *error;
+        BOOL passcodeEnabled = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:&error];
         
-        [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+        if (passcodeEnabled) { // Only have to snapshot apps if there's authentication enabled
+            [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+                if([(SpringBoard*)[UIApplication sharedApplication] _accessibilityFrontMostApplication] && !isUILocked()){
+                    SBMainSwitcherViewController *mainSwitcherCont = [objc_getClass("SBMainSwitcherViewController") sharedInstance];
+                    CGRect rect = [mainSwitcherCont.view bounds];
+                    CGSize viewSize = rect.size;
+                    UIGraphicsBeginImageContextWithOptions(viewSize, NO, 0.0);
+                    [mainSwitcherCont.view drawViewHierarchyInRect:CGRectMake(0, 0, viewSize.width, viewSize.height) afterScreenUpdates:YES];
+                    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+                    UIGraphicsEndImageContext();
+                    
+                    self.snapshotImageView.image = img;
+                }
+            }];
             
-            
-
-            UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
-            NSLog(@"nine_TWEAK | %@", keyWindow);
-            CGRect rect = [keyWindow bounds];
-            
-            CGSize viewSize = rect.size;
-            UIGraphicsBeginImageContextWithOptions(viewSize, NO, 0.0);
-            [keyWindow drawViewHierarchyInRect:CGRectMake(0, 0, viewSize.width, viewSize.height) afterScreenUpdates:YES];
-            UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-
-            self.snapshotImageView.image = img;
-        }];
+            [[NSNotificationCenter defaultCenter] addObserverForName: @"SBFDeviceBlockStateDidChangeNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+                if(MSHookIvar<NSUInteger>([objc_getClass("SBLockStateAggregator") sharedInstance], "_lockState") == 1){ // The device just was unlocked (treated as notification center)
+                    [UIView animateWithDuration:.8
+                                          delay:0
+                                        options:UIViewAnimationOptionCurveEaseInOut
+                                     animations:^{self.snapshotImageView.alpha = 0;}
+                                     completion:nil];
+                } else{
+                    if([(SpringBoard*)[UIApplication sharedApplication] _accessibilityFrontMostApplication]){
+                        self.snapshotImageView.alpha = 1;
+                    }
+                }
+            }];
+        }
         
     }
     return self;

@@ -370,7 +370,6 @@ extern "C" UIColor *LCPParseColorString(NSString *colorStringFromPrefs, NSString
 @property (nonatomic, retain) NSString *containerPath;
 @end
 
-@interface SBApplication
--(XBApplicationSnapshotManifest *)_snapshotManifest;
-@property (nonatomic, retain) NSString *bundleIdentifier;
+
+@interface SBMainSwitcherViewController : UIViewController
 @end
