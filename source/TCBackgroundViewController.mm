@@ -23,7 +23,7 @@ extern BOOL isUILocked();
 
         CGRect screenFrame = UIScreen.mainScreen.bounds;
 
-        alwaysBlurEnabled = NO; // SETTING
+        alwaysBlurEnabled = YES; // SETTING
         
         if(!self.view){
             self.view = [[UIView alloc] initWithFrame:screenFrame];
@@ -33,7 +33,9 @@ extern BOOL isUILocked();
         if(!self.blurHistoryEffectView){
             // The BSUIBackdropView has so much customization its a little insane. Sort of unusual way to implement however.
             _UIBackdropViewSettings *settings = [[objc_getClass("_UIBackdropViewSettingsDynamic") alloc] init];
+            
             self.blurHistoryEffectView = [[objc_getClass("BSUIBackdropView") alloc] initWithSettings:settings];
+            
             self.blurHistoryEffectView.frame = frame;
             self.blurHistoryEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             [self.view addSubview:self.blurHistoryEffectView];
