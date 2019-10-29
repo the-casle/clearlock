@@ -51,6 +51,29 @@ extern BOOL isUILocked();
             [self.view addSubview:self.blurEffectView];
         }
         
+        if(!self.snapshotImageView){
+            self.snapshotImageView = [[UIImageView alloc] initWithFrame:UIScreen.mainScreen.bounds];
+            [self.view addSubview: self.snapshotImageView];
+            [self.view sendSubviewToBack:self.snapshotImageView];
+        }
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+            
+            
+
+            UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
+            NSLog(@"nine_TWEAK | %@", keyWindow);
+            CGRect rect = [keyWindow bounds];
+            
+            CGSize viewSize = rect.size;
+            UIGraphicsBeginImageContextWithOptions(viewSize, NO, 0.0);
+            [keyWindow drawViewHierarchyInRect:CGRectMake(0, 0, viewSize.width, viewSize.height) afterScreenUpdates:YES];
+            UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+
+            self.snapshotImageView.image = img;
+        }];
+        
     }
     return self;
 }

@@ -30,6 +30,7 @@ extern "C" UIColor *LCPParseColorString(NSString *colorStringFromPrefs, NSString
 
 @interface SpringBoard
 -(int)nowPlayingProcessPID;
+-(id) _accessibilityFrontMostApplication;
 @end
 
 @interface BSUIEmojiLabelView : UILabel
@@ -358,4 +359,18 @@ extern "C" UIColor *LCPParseColorString(NSString *colorStringFromPrefs, NSString
 @interface PLPlatterHeaderContentView : UIView
 @property (nonatomic, retain) NSArray *iconButtons;
 -(id)_titleLabel;
+@end
+
+@interface SBApplicationController
++(id) sharedInstance;
+-(id)applicationWithBundleIdentifier:(id)arg1 ;
+@end
+
+@interface XBApplicationSnapshotManifest
+@property (nonatomic, retain) NSString *containerPath;
+@end
+
+@interface SBApplication
+-(XBApplicationSnapshotManifest *)_snapshotManifest;
+@property (nonatomic, retain) NSString *bundleIdentifier;
 @end

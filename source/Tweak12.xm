@@ -24,6 +24,7 @@ static BOOL colorBannersEnabled;
 static id _instanceController;
 static id _container;
 
+
 %hook NCNotificationListSectionRevealHintView
 // bigger "No Older Notifications" text
 -(void)layoutSubviews {
