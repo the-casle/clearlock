@@ -9,7 +9,6 @@ static id _container;
 
 
 %hook NCNotificationListSectionRevealHintView
-// bigger "No Older Notifications" text
 -(void)layoutSubviews {
     %orig;
     if(enableHideText) MSHookIvar<UILabel *>(self, "_revealHintTitle").hidden = YES;
