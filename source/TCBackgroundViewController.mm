@@ -95,7 +95,6 @@ extern BOOL isUILocked();
     return self;
 }
 
-// Did someone say sharedInstance?
 + (instancetype)sharedInstance {
     static TCBackgroundViewController *sharedInstance = nil;
     static dispatch_once_t onceToken; // onceToken = 0
@@ -106,7 +105,7 @@ extern BOOL isUILocked();
     return sharedInstance;
 }
 
--(void) updateSceenShot: (BOOL)content isRevealed: (BOOL)isHistoryRevealed {
+-(void) updateWithContent: (BOOL)content isHistoryRevealed: (BOOL)isHistoryRevealed {
     
     // forces the blur always enabled
     if((alwaysLockBlurEnabled && isOnLockscreen()) || (alwaysNCBlurEnabled && !isOnLockscreen())){
@@ -117,12 +116,6 @@ extern BOOL isUILocked();
     }
 
     if(content == YES && isHistoryRevealed == YES){
-        // Notification Center
-        /*[UIView animateWithDuration:.5
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{self.blurHistoryEffectView.alpha = 1;}
-                         completion:nil];*/
         self.blurHistoryEffectView.alpha = 1;
         self.blurEffectView.alpha = 0;
     } else if(content == YES && isHistoryRevealed == NO){

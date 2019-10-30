@@ -5,6 +5,6 @@
 @property (nonatomic, retain) BSUIBackdropView *blurEffectView;
 @property (nonatomic, retain) BSUIBackdropView *blurHistoryEffectView;
 @property (nonatomic, retain) UIImageView *snapshotImageView;
--(void) updateSceenShot: (BOOL)content isRevealed: (BOOL)isHistoryRevealed;
+-(void) updateWithContent: (BOOL)content isHistoryRevealed: (BOOL)isHistoryRevealed;
 + (id) sharedInstance;
 @end
