@@ -2,18 +2,9 @@
 #import "TCBackgroundViewController.h"
 #import "lockscreenfunction.h"
 
-static BOOL enableHideText = YES; // SETTING
-
 static id _instanceController;
 static id _container;
 
-
-%hook NCNotificationListSectionRevealHintView
--(void)layoutSubviews {
-    %orig;
-    if(enableHideText) MSHookIvar<UILabel *>(self, "_revealHintTitle").hidden = YES;
-}
-%end
 
 %hook SBDashBoardWallpaperEffectView
 // removes the wallpaper view when opening camera

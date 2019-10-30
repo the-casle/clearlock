@@ -1,6 +1,6 @@
-Package: com.thecasle.nine-12
-Name: nine-12
-Depends: mobilesubstrate
+Package: com.thecasle.clearlock
+Name: ClearLock
+Depends: mobilesubstrate, ws.hbang.common (>= 1.11)
 Version: 0.0.1
 Architecture: iphoneos-arm
 Description: An awesome MobileSubstrate tweak!

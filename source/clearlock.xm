@@ -1,14 +1,15 @@
 #import <substrate.h>
 #import <Foundation/Foundation.h>
 
+#import "CLPProvider.h"
 #import "clearlock.h"
 #import "lockscreenfunction.h"
 
 static id _instanceController;
 static id _container;
 
-BOOL isClearLockscreen = YES; // SETTING
-BOOL isClear = YES; // SETTING
+static BOOL isClearLockscreen; // SETTING
+static BOOL isClear;// SETTING
 
 %hook SBCoverSheetUnlockedEnvironmentHostingWindow
 -(void)setHidden:(BOOL)arg1 {
@@ -105,5 +106,7 @@ BOOL isClear = YES; // SETTING
 %end
 
 %ctor{
+    [prefs registerBool: &isClearLockscreen default: YES forKey:@"kClearLockscreen"];
+    [prefs registerBool: &isClear default: YES forKey:@"kTransparency"];
     if(isClear) %init;
 }
