@@ -78,13 +78,13 @@ extern BOOL isUILocked();
             
             [[NSNotificationCenter defaultCenter] addObserverForName: @"SBFDeviceBlockStateDidChangeNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
                 if(MSHookIvar<NSUInteger>([objc_getClass("SBLockStateAggregator") sharedInstance], "_lockState") == 1){ // The device just was unlocked (treated as notification center)
-                    [UIView animateWithDuration:.8
+                    [UIView animateWithDuration:.2
                                           delay:0
                                         options:UIViewAnimationOptionCurveEaseInOut
                                      animations:^{self.snapshotImageView.alpha = 0;}
                                      completion:nil];
                 } else{
-                    if([(SpringBoard*)[UIApplication sharedApplication] _accessibilityFrontMostApplication]){
+                    if([(SpringBoard*)[UIApplication sharedApplication] _accessibilityFrontMostApplication] && isUILocked()){
                         self.snapshotImageView.alpha = 1;
                     }
                 }
