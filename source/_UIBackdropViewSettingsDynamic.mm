@@ -23,7 +23,6 @@ static NSString *notifHex;
     return self;
 }
 -(void)setDefaultValues{
-    
     self.appliesTintAndBlurSettings = YES;
     self.scale = (blurValueHistory.doubleValue >= 5) ? .25 : 1;
     self.usesBackdropEffectView = YES;

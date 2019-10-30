@@ -318,6 +318,9 @@ extern "C" UIColor *LCPParseColorString(NSString *colorStringFromPrefs, NSString
 @property (assign,nonatomic) double blurRadius;
 -(id) init;
 +(id)settingsForPrivateStyle:(long long)arg1 ;
+@property (assign,nonatomic) long long suppressSettingsDidChange;
+@property (assign,nonatomic) BOOL explicitlySetGraphicsQuality;
+@property (assign,setter=setDesignMode:,nonatomic) BOOL designMode;    
 @property (assign,getter=isBackdropVisible,nonatomic) BOOL backdropVisible;
 @property (assign,nonatomic) double grayscaleTintLevel;
 @property (assign,nonatomic) BOOL usesBackdropEffectView;

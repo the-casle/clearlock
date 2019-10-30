@@ -7,11 +7,12 @@
 static id _instanceController;
 static id _container;
 
-BOOL isSeperateLockscreen = NO; //isOnLockscreen() SETTING
+BOOL isClearLockscreen = YES; // SETTING
+BOOL isClear = YES; // SETTING
 
 %hook SBCoverSheetUnlockedEnvironmentHostingWindow
 -(void)setHidden:(BOOL)arg1 {
-    if (isSeperateLockscreen) %orig;
+    if (isOnLockscreen() && !isClearLockscreen) %orig;
     else %orig(NO);
 }
 %end
@@ -23,14 +24,13 @@ BOOL isSeperateLockscreen = NO; //isOnLockscreen() SETTING
         [wallpaperCont setVariant:0];
         [[wallpaperCont _window] setWindowLevel:1035]; // What it normally is
     }
-    if(!isSeperateLockscreen){
+    if(!isOnLockscreen() || isClearLockscreen){
         [wallpaperCont setVariant:1];
         [[wallpaperCont _window] setWindowLevel:-5]; // Below icons
     }
-    
-    if(isSeperateLockscreen){
+    if(isOnLockscreen() && !isClearLockscreen){
         ((UIView*)[%c(SBCoverSheetPanelBackgroundContainerView) sharedInstance]).alpha = 1;
-    } else if(!isSeperateLockscreen){
+    } else if(!isOnLockscreen()){
         [UIView animateWithDuration:.2
                               delay:.3
                             options:UIViewAnimationOptionCurveEaseInOut
@@ -43,7 +43,7 @@ BOOL isSeperateLockscreen = NO; //isOnLockscreen() SETTING
 
 %hook _SBWallpaperWindow
 -(void) setWindowLevel:(CGFloat) level{
-    if(!isSeperateLockscreen){
+    if(!isOnLockscreen() || isClearLockscreen){
         %orig(-5);
     } else %orig;
 }
@@ -66,7 +66,7 @@ BOOL isSeperateLockscreen = NO; //isOnLockscreen() SETTING
 
 %hook SBWallpaperController
 -(void)setVariant:(long long) arg1 {
-    if(!isSeperateLockscreen) {
+    if(!isOnLockscreen()) {
         %orig(1);
     } else {
         %orig;
@@ -103,3 +103,7 @@ BOOL isSeperateLockscreen = NO; //isOnLockscreen() SETTING
     %orig(NO);
 }
 %end
+
+%ctor{
+    if(isClear) %init;
+}

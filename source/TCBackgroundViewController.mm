@@ -6,7 +6,9 @@
 
 @import LocalAuthentication;
 
-static BOOL alwaysBlurEnabled;
+static BOOL alwaysLockBlurEnabled = YES; // SETTING
+static BOOL alwaysNCBlurEnabled = YES; // SETTING
+
 
 //----------------------------------------------------------------
 
@@ -19,13 +21,7 @@ extern BOOL isUILocked();
 
 - (instancetype) init{
     if(self = [super init]){
-        CGRect frame = UIScreen.mainScreen.bounds;
-        frame.size.width = (frame.size.width > frame.size.height) ? frame.size.width : frame.size.height;
-        frame.size.height = (frame.size.width > frame.size.height) ? frame.size.width : frame.size.height;
-
         CGRect screenFrame = UIScreen.mainScreen.bounds;
-
-        alwaysBlurEnabled = YES; // SETTING
         
         if(!self.view){
             self.view = [[UIView alloc] initWithFrame:screenFrame];
@@ -35,17 +31,16 @@ extern BOOL isUILocked();
         if(!self.blurHistoryEffectView){
             // The BSUIBackdropView has so much customization its a little insane. Sort of unusual way to implement however.
             _UIBackdropViewSettings *settings = [[objc_getClass("_UIBackdropViewSettingsDynamic") alloc] init];
-            
             self.blurHistoryEffectView = [[objc_getClass("BSUIBackdropView") alloc] initWithSettings:settings];
             
-            self.blurHistoryEffectView.frame = frame;
+            self.blurHistoryEffectView.frame = screenFrame;
             self.blurHistoryEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             [self.view addSubview:self.blurHistoryEffectView];
         }
         
         // lockscreen blur
         if(!self.blurEffectView){
-            self.blurEffectView.frame = frame;
+            self.blurEffectView.frame = screenFrame;
             self.blurEffectView.alpha = 0;
             _UIBackdropViewSettings *settings = [[objc_getClass("_UIBackdropViewSettingsDynamic") alloc] init];
             self.blurEffectView = [[objc_getClass("BSUIBackdropView") alloc] initWithSettings:settings];
@@ -114,7 +109,7 @@ extern BOOL isUILocked();
 -(void) updateSceenShot: (BOOL)content isRevealed: (BOOL)isHistoryRevealed {
     
     // forces the blur always enabled
-    if(alwaysBlurEnabled || !isOnLockscreen()){
+    if((alwaysLockBlurEnabled && isOnLockscreen()) || (alwaysNCBlurEnabled && !isOnLockscreen())){
         content = YES;
     }
     if(isOnLockscreen()){
