@@ -7,15 +7,15 @@
 
 @import LocalAuthentication;
 
-static BOOL alwaysLockBlurEnabled = YES; // SETTING
-static BOOL alwaysNCBlurEnabled = YES; // SETTING
+static BOOL alwaysLockBlurEnabled;
+static BOOL alwaysNCBlurEnabled;
 
-static double historyBlur = 10;
-static double lockBlur = 10;
-static double historySaturation = 1.2;
-static double lockSaturation = 1.2;
-static double historyColorAlpha = 0;
-static double lockColorAlpha = 0;
+static double historyBlur;
+static double lockBlur;
+static double historySaturation;
+static double lockSaturation;
+static double historyColorAlpha;
+static double lockColorAlpha;
 static UIColor *historyColor = [UIColor blackColor];
 static UIColor *lockColor = [UIColor blackColor];
 
@@ -105,7 +105,7 @@ extern BOOL isUILocked();
                 }
             }];
         }
-        
+        [self registerPreferences];
     }
     return self;
 }
@@ -118,6 +118,18 @@ extern BOOL isUILocked();
     });
     
     return sharedInstance;
+}
+
+-(void) registerPreferences{
+    [prefs registerBool: &alwaysLockBlurEnabled default: YES forKey:@"kAlwaysLockBlurEnabled"];
+    [prefs registerBool: &alwaysNCBlurEnabled default: YES forKey:@"kAlwaysNCBlurEnabled"];
+    
+    [prefs registerDouble: &historyBlur default: 10 forKey:@"kHistoryBlur"];
+    [prefs registerDouble: &lockBlur default: 10 forKey:@"kLockBlur"];
+    [prefs registerDouble: &historySaturation default: 1.2 forKey:@"kHistorySaturation"];
+    [prefs registerDouble: &lockSaturation default: 1.2 forKey:@"kLockSaturation"];
+    [prefs registerDouble: &historyColorAlpha default: 0 forKey:@"kHistoryColorAlpha"];
+    [prefs registerDouble: &lockColorAlpha default: 0 forKey:@"kLockColorAlpha"];
 }
 
 -(void) updateWithContent: (BOOL)content isHistoryRevealed: (BOOL)isHistoryRevealed {

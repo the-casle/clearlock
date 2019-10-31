@@ -8,8 +8,8 @@
 static id _instanceController;
 static id _container;
 
-static BOOL isClearLockscreen; // SETTING
-static BOOL isClear;// SETTING
+static BOOL isClearLockscreen;
+static BOOL isClear;
 
 %hook SBCoverSheetUnlockedEnvironmentHostingWindow
 -(void)setHidden:(BOOL)arg1 {
@@ -108,5 +108,6 @@ static BOOL isClear;// SETTING
 %ctor{
     [prefs registerBool: &isClearLockscreen default: YES forKey:@"kClearLockscreen"];
     [prefs registerBool: &isClear default: YES forKey:@"kTransparency"];
+    
     if(isClear) %init;
 }
