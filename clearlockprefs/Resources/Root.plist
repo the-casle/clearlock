@@ -34,7 +34,7 @@
             <key>PostNotification</key>
             <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
             <key>key</key>
-            <string>kLockTransparency</string>
+            <string>kClearLockscreen</string>
             <key>label</key>
             <string>Lock Transparency</string>
         </dict>
@@ -134,7 +134,7 @@
             <key>min</key>
             <real>0</real>
             <key>max</key>
-            <real>60</real>
+            <real>30</real>
             <key>isSegmented</key>
             <false/>
         </dict>
@@ -158,7 +158,7 @@
             <key>min</key>
             <real>0</real>
             <key>max</key>
-            <real>60</real>
+            <real>30</real>
             <key>isSegmented</key>
             <false/>
         </dict>

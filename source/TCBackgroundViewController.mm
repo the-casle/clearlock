@@ -9,6 +9,8 @@
 
 static BOOL alwaysLockBlurEnabled;
 static BOOL alwaysNCBlurEnabled;
+static BOOL isClearLockscreen;
+static BOOL isClear;
 
 static double historyBlur;
 static double lockBlur;
@@ -42,7 +44,7 @@ extern BOOL isUILocked();
         if(!self.blurHistoryEffectView){
             // The BSUIBackdropView has so much customization its a little insane. Sort of unusual way to implement however.
             _UIBackdropViewSettings *settings = [[objc_getClass("_UIBackdropViewSettingsDynamic") alloc] initWithBlur: historyBlur
-                                                                                                           saturation: historySaturation
+                                                                                                           saturation: (historySaturation * 0.1)
                                                                                                                 color: historyColor
                                                                                                            colorAlpha: historyColorAlpha];
             self.blurHistoryEffectView = [[objc_getClass("BSUIBackdropView") alloc] initWithSettings:settings];
@@ -57,7 +59,7 @@ extern BOOL isUILocked();
             self.blurEffectView.frame = screenFrame;
             self.blurEffectView.alpha = 0;
             _UIBackdropViewSettings *settings = [[objc_getClass("_UIBackdropViewSettingsDynamic") alloc] initWithBlur: lockBlur
-                                                                                                           saturation: lockSaturation
+                                                                                                           saturation: (lockSaturation * 0.1)
                                                                                                                 color: lockColor
                                                                                                            colorAlpha: lockColorAlpha];
             self.blurEffectView = [[objc_getClass("BSUIBackdropView") alloc] initWithSettings:settings];
@@ -74,7 +76,7 @@ extern BOOL isUILocked();
         NSError *error;
         BOOL passcodeEnabled = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:&error];
         
-        if (passcodeEnabled) { // Only have to snapshot apps if there's authentication enabled
+        if (passcodeEnabled && isClearLockscreen && isClear) { // Only have to snapshot apps if there's authentication enabled
             [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
                 if([(SpringBoard*)[UIApplication sharedApplication] _accessibilityFrontMostApplication]){
                     if(!isUILocked()){
@@ -124,11 +126,13 @@ extern BOOL isUILocked();
 -(void) registerPreferences{
     [prefs registerBool: &alwaysLockBlurEnabled default: YES forKey:@"kAlwaysLockBlurEnabled"];
     [prefs registerBool: &alwaysNCBlurEnabled default: YES forKey:@"kAlwaysNCBlurEnabled"];
+    [prefs registerBool: &isClearLockscreen default: YES forKey:@"kClearLockscreen"];
+    [prefs registerBool: &isClear default: YES forKey:@"kTransparency"];
     
     [prefs registerDouble: &historyBlur default: 10 forKey:@"kHistoryBlur"];
     [prefs registerDouble: &lockBlur default: 10 forKey:@"kLockBlur"];
-    [prefs registerDouble: &historySaturation default: 1.2 forKey:@"kHistorySaturation"];
-    [prefs registerDouble: &lockSaturation default: 1.2 forKey:@"kLockSaturation"];
+    [prefs registerDouble: &historySaturation default: 12 forKey:@"kHistorySaturation"];
+    [prefs registerDouble: &lockSaturation default: 12 forKey:@"kLockSaturation"];
     [prefs registerDouble: &historyColorAlpha default: 0 forKey:@"kHistoryColorAlpha"];
     [prefs registerDouble: &lockColorAlpha default: 0 forKey:@"kLockColorAlpha"];
 }
