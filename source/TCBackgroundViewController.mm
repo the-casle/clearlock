@@ -2,6 +2,7 @@
 #import "CLPProvider.h"
 
 #import <substrate.h>
+#import <notify.h>
 #import "TCBackgroundViewController.h"
 #import "_UIBackdropViewSettingsDynamic.h"
 
@@ -26,13 +27,32 @@ static UIColor *lockColor = [UIColor blackColor];
 extern BOOL isOnLockscreen();
 extern BOOL isUILocked();
 
+void registerPreferences(){
+    alwaysLockBlurEnabled = [prefs boolForKey:@"kAlwaysLockBlur"];
+    alwaysNCBlurEnabled = [prefs boolForKey:@"kAlwaysNCBlur"];
+    isClearLockscreen = [prefs boolForKey:@"kClearLockscreen"];
+    isClear = [prefs boolForKey:@"kTransparency"];
+    
+    historyBlur = [prefs doubleForKey:@"kHistoryBlur"];
+    lockBlur = [prefs doubleForKey:@"kLockBlur"];
+    historySaturation = [prefs doubleForKey:@"kHistorySaturation"];
+    lockSaturation = [prefs doubleForKey:@"kLockSaturation"];
+    historyColorAlpha = [prefs doubleForKey:@"kHistoryColorAlpha"];
+    lockColorAlpha = [prefs doubleForKey:@"kLockColorAlpha"];
+}
+
+int regToken;
+uint32_t status = notify_register_dispatch("com.thecasle.clearlockprefs/ReloadPrefs", &regToken, dispatch_get_main_queue(), ^(int token) {
+    registerPreferences();
+});
+
 @implementation TCBackgroundViewController {
 
 }
 
 - (instancetype) init{
     if(self = [super init]){
-        [self registerPreferences];
+        registerPreferences();
         
         CGRect screenFrame = UIScreen.mainScreen.bounds;
         
@@ -75,9 +95,8 @@ extern BOOL isUILocked();
         LAContext *context = [LAContext new];
         NSError *error;
         BOOL passcodeEnabled = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:&error];
-        
-        if (passcodeEnabled && isClearLockscreen && isClear) { // Only have to snapshot apps if there's authentication enabled
-            [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+        [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+            if (passcodeEnabled && isClearLockscreen && isClear) { // Only have to snapshot apps if there's authentication enabled
                 if([(SpringBoard*)[UIApplication sharedApplication] _accessibilityFrontMostApplication]){
                     if(!isUILocked()){
                         SBMainSwitcherViewController *mainSwitcherCont = [objc_getClass("SBMainSwitcherViewController") sharedInstance];
@@ -93,9 +112,11 @@ extern BOOL isUILocked();
                 } else {
                     self.snapshotImageView.alpha = 0;
                 }
-            }];
-            
-            [[NSNotificationCenter defaultCenter] addObserverForName: @"SBFDeviceBlockStateDidChangeNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+            }
+        }];
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName: @"SBFDeviceBlockStateDidChangeNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+            if (passcodeEnabled && isClearLockscreen && isClear) { // Only have to snapshot apps if there's authentication enabled
                 if(MSHookIvar<NSUInteger>([objc_getClass("SBLockStateAggregator") sharedInstance], "_lockState") == 1){ // The device just was unlocked (treated as notification center)
                     [UIView animateWithDuration:.2
                                           delay:0
@@ -107,8 +128,8 @@ extern BOOL isUILocked();
                         self.snapshotImageView.alpha = 1;
                     }
                 }
-            }];
-        }
+            }
+        }];
     }
     return self;
 }
@@ -121,20 +142,6 @@ extern BOOL isUILocked();
     });
     
     return sharedInstance;
-}
-
--(void) registerPreferences{
-    [prefs registerBool: &alwaysLockBlurEnabled default: YES forKey:@"kAlwaysLockBlurEnabled"];
-    [prefs registerBool: &alwaysNCBlurEnabled default: YES forKey:@"kAlwaysNCBlurEnabled"];
-    [prefs registerBool: &isClearLockscreen default: YES forKey:@"kClearLockscreen"];
-    [prefs registerBool: &isClear default: YES forKey:@"kTransparency"];
-    
-    [prefs registerDouble: &historyBlur default: 10 forKey:@"kHistoryBlur"];
-    [prefs registerDouble: &lockBlur default: 10 forKey:@"kLockBlur"];
-    [prefs registerDouble: &historySaturation default: 12 forKey:@"kHistorySaturation"];
-    [prefs registerDouble: &lockSaturation default: 12 forKey:@"kLockSaturation"];
-    [prefs registerDouble: &historyColorAlpha default: 0 forKey:@"kHistoryColorAlpha"];
-    [prefs registerDouble: &lockColorAlpha default: 0 forKey:@"kLockColorAlpha"];
 }
 
 -(void) updateWithContent: (BOOL)content isHistoryRevealed: (BOOL)isHistoryRevealed {

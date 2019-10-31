@@ -1,5 +1,6 @@
 #import <substrate.h>
 #import <Foundation/Foundation.h>
+#import <notify.h>
 
 #import "CLPProvider.h"
 #import "clearlock.h"
@@ -10,33 +11,38 @@ static id _container;
 
 static BOOL isClearLockscreen;
 static BOOL isClear;
+static BOOL flyInDisabled;
 
 %hook SBCoverSheetUnlockedEnvironmentHostingWindow
 -(void)setHidden:(BOOL)arg1 {
-    if (isOnLockscreen() && !isClearLockscreen) %orig;
-    else %orig(NO);
+    if(isClear){
+        if (isOnLockscreen() && !isClearLockscreen) %orig;
+        else %orig(NO);
+    } else %orig;
 }
 %end
 
 %hook SBCoverSheetSlidingViewController
 - (long long)dismissalSlidingMode {
-    SBWallpaperController *wallpaperCont = [%c(SBWallpaperController) sharedInstance];
-    if(isUILocked()){
-        [wallpaperCont setVariant:0];
-        [[wallpaperCont _window] setWindowLevel:1035]; // What it normally is
-    }
-    if(!isOnLockscreen() || isClearLockscreen){
-        [wallpaperCont setVariant:1];
-        [[wallpaperCont _window] setWindowLevel:-5]; // Below icons
-    }
-    if(isOnLockscreen() && !isClearLockscreen){
-        ((UIView*)[%c(SBCoverSheetPanelBackgroundContainerView) sharedInstance]).alpha = 1;
-    } else if(!isOnLockscreen()){
-        [UIView animateWithDuration:.2
-                              delay:.3
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{((UIView*)[%c(SBCoverSheetPanelBackgroundContainerView) sharedInstance]).alpha = 0;}
-                         completion:nil];
+    if(isClear){
+        SBWallpaperController *wallpaperCont = [%c(SBWallpaperController) sharedInstance];
+        if(isUILocked()){
+            [wallpaperCont setVariant:0];
+            [[wallpaperCont _window] setWindowLevel:1035]; // What it normally is
+        }
+        if(!isOnLockscreen() || isClearLockscreen){
+            [wallpaperCont setVariant:1];
+            [[wallpaperCont _window] setWindowLevel:-5]; // Below icons
+        }
+        if(isOnLockscreen() && !isClearLockscreen){
+            ((UIView*)[%c(SBCoverSheetPanelBackgroundContainerView) sharedInstance]).alpha = 1;
+        } else if(!isOnLockscreen()){
+            [UIView animateWithDuration:.2
+                                  delay:.3
+                                options:UIViewAnimationOptionCurveEaseInOut
+                             animations:^{((UIView*)[%c(SBCoverSheetPanelBackgroundContainerView) sharedInstance]).alpha = 0;}
+                             completion:nil];
+        }
     }
     return %orig;
 }
@@ -44,9 +50,12 @@ static BOOL isClear;
 
 %hook _SBWallpaperWindow
 -(void) setWindowLevel:(CGFloat) level{
-    if(!isOnLockscreen() || isClearLockscreen){
-        %orig(-5);
+    if(isClear){
+        if(!isOnLockscreen() || isClearLockscreen){
+            %orig(-5);
+        } else %orig;
     } else %orig;
+    
 }
 %end
 
@@ -67,11 +76,13 @@ static BOOL isClear;
 
 %hook SBWallpaperController
 -(void)setVariant:(long long) arg1 {
-    if(!isOnLockscreen()) {
-        %orig(1);
-    } else {
-        %orig;
-    }
+    if(isClear){
+        if(!isOnLockscreen()) {
+            %orig(1);
+        } else {
+            %orig;
+        }
+    } else %orig;
 }
 %end
 
@@ -94,20 +105,28 @@ static BOOL isClear;
 %hook SBHomeScreenWindow
 -(id)_initWithScreen:(id)arg1 layoutStrategy:(id)arg2 debugName:(id)arg3 rootViewController:(id)arg4 scene:(id)arg5 {
     %orig;
-    [self _setSecure:YES];
+    if(isClear)[self _setSecure:YES];
     return self;
 }
 %end
 
 %hook SBCoverSheetTransitionSettings //Sinfool back at it
 -(void)setIconsFlyIn:(BOOL) arg1{
-    %orig(NO);
+    if(flyInDisabled) %orig(NO); // MAKE THIS LIVE UPDATE
+    else %orig;
 }
 %end
 
+void readPreferences(){
+    isClearLockscreen = [prefs boolForKey:@"kClearLockscreen"];
+    isClear = [prefs boolForKey:@"kTransparency"];
+    flyInDisabled = [prefs boolForKey:@"kFlyInDisabled"];
+}
+
 %ctor{
-    [prefs registerBool: &isClearLockscreen default: YES forKey:@"kClearLockscreen"];
-    [prefs registerBool: &isClear default: YES forKey:@"kTransparency"];
-    
-    if(isClear) %init;
+    int regToken;
+    notify_register_dispatch("com.thecasle.clearlockprefs/ReloadPrefs", &regToken, dispatch_get_main_queue(), ^(int token) {
+        readPreferences();
+    });
+    readPreferences();
 }
