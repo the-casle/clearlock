@@ -30,6 +30,8 @@ extern BOOL isUILocked();
 
 - (instancetype) init{
     if(self = [super init]){
+        [self registerPreferences];
+        
         CGRect screenFrame = UIScreen.mainScreen.bounds;
         
         if(!self.view){
@@ -105,7 +107,6 @@ extern BOOL isUILocked();
                 }
             }];
         }
-        [self registerPreferences];
     }
     return self;
 }
