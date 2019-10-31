@@ -8,7 +8,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>clearlockprefs First Page</string>
+			<string>Settings</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -17,13 +17,201 @@
 			<true/>
 			<key>defaults</key>
 			<string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
 			<key>key</key>
-			<string>AwesomeSwitch1</string>
+			<string>kTransparency</string>
 			<key>label</key>
-			<string>Awesome Switch 1</string>
+			<string>Transparency</string>
 		</dict>
+        <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true/>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>key</key>
+            <string>kLockTransparency</string>
+            <key>label</key>
+            <string>Lock Transparency</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true/>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>key</key>
+            <string>kAlwaysLockBlur</string>
+            <key>label</key>
+            <string>Always Blur Lockscreen</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true/>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>key</key>
+            <string>kAlwaysNCBlur</string>
+            <key>label</key>
+            <string>Always Blur Notification Center</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>History Blur</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSSliderCell</string>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>key</key>
+            <string>kHistoryBlur</string>
+            <key>showValue</key>
+            <true/>
+            <key>min</key>
+            <real>0</real>
+            <key>max</key>
+            <real>60</real>
+            <key>isSegmented</key>
+            <false/>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Lock Blur</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSSliderCell</string>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>key</key>
+            <string>kLockBlur</string>
+            <key>showValue</key>
+            <true/>
+            <key>min</key>
+            <real>0</real>
+            <key>max</key>
+            <real>60</real>
+            <key>isSegmented</key>
+            <false/>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>History Saturation</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSSliderCell</string>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>key</key>
+            <string>kHistorySaturation</string>
+            <key>showValue</key>
+            <true/>
+            <key>min</key>
+            <real>0</real>
+            <key>max</key>
+            <real>60</real>
+            <key>isSegmented</key>
+            <false/>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Lock Saturation</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSSliderCell</string>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>key</key>
+            <string>kLockSaturation</string>
+            <key>showValue</key>
+            <true/>
+            <key>min</key>
+            <real>0</real>
+            <key>max</key>
+            <real>60</real>
+            <key>isSegmented</key>
+            <false/>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>History Color Alpha</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSSliderCell</string>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>key</key>
+            <string>kHistoryColorAlpha</string>
+            <key>showValue</key>
+            <true/>
+            <key>min</key>
+            <real>0</real>
+            <key>max</key>
+            <real>60</real>
+            <key>isSegmented</key>
+            <false/>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Lock Color Alpha</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSSliderCell</string>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>key</key>
+            <string>kLockColorAlpha</string>
+            <key>showValue</key>
+            <true/>
+            <key>min</key>
+            <real>0</real>
+            <key>max</key>
+            <real>60</real>
+            <key>isSegmented</key>
+            <false/>
+        </dict>
 	</array>
 	<key>title</key>
-	<string>clearlockprefs</string>
+	<string>Clear Lock</string>
 </dict>
 </plist>
