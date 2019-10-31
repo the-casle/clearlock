@@ -9,6 +9,14 @@
 static BOOL alwaysLockBlurEnabled = YES; // SETTING
 static BOOL alwaysNCBlurEnabled = YES; // SETTING
 
+static double historyBlur = 10;
+static double lockBlur = 10;
+static double historySaturation = 1.2;
+static double lockSaturation = 1.2;
+static double historyColorAlpha = 0;
+static double lockColorAlpha = 0;
+static UIColor *historyColor = [UIColor blackColor];
+static UIColor *lockColor = [UIColor blackColor];
 
 //----------------------------------------------------------------
 
@@ -30,7 +38,10 @@ extern BOOL isUILocked();
         // NC blur
         if(!self.blurHistoryEffectView){
             // The BSUIBackdropView has so much customization its a little insane. Sort of unusual way to implement however.
-            _UIBackdropViewSettings *settings = [[objc_getClass("_UIBackdropViewSettingsDynamic") alloc] init];
+            _UIBackdropViewSettings *settings = [[objc_getClass("_UIBackdropViewSettingsDynamic") alloc] initWithBlur: historyBlur
+                                                                                                           saturation: historySaturation
+                                                                                                                color: historyColor
+                                                                                                           colorAlpha: historyColorAlpha];
             self.blurHistoryEffectView = [[objc_getClass("BSUIBackdropView") alloc] initWithSettings:settings];
             
             self.blurHistoryEffectView.frame = screenFrame;
@@ -42,7 +53,10 @@ extern BOOL isUILocked();
         if(!self.blurEffectView){
             self.blurEffectView.frame = screenFrame;
             self.blurEffectView.alpha = 0;
-            _UIBackdropViewSettings *settings = [[objc_getClass("_UIBackdropViewSettingsDynamic") alloc] init];
+            _UIBackdropViewSettings *settings = [[objc_getClass("_UIBackdropViewSettingsDynamic") alloc] initWithBlur: lockBlur
+                                                                                                           saturation: lockSaturation
+                                                                                                                color: lockColor
+                                                                                                           colorAlpha: lockColorAlpha];
             self.blurEffectView = [[objc_getClass("BSUIBackdropView") alloc] initWithSettings:settings];
             self.blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             [self.view addSubview:self.blurEffectView];

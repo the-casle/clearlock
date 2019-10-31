@@ -3,37 +3,38 @@
 #import <substrate.h>
 #import "_UIBackdropViewSettingsDynamic.h"
 
-static NSNumber *blurValueHistory;
-static NSNumber *darkeningValueHistory;
-static NSNumber *saturationValueHistory;
+// For some reason these need to be static instead of iVars, I'll figure this out eventually
+static double blurValue;
+static double colorAlphaValue;
+static double saturationValue;
 static UIColor *notificationCenterColoring;
-
-static NSString *notifHex;
 
 //----------------------------------------------------------------
 @implementation _UIBackdropViewSettingsDynamic
 
-- (instancetype) init{
+- (instancetype) initWithBlur:(double)blurRadius saturation:(double)saturation color:(UIColor *)color colorAlpha:(double)colorAlpha{
     if(self = [super init]){
-        blurValueHistory = @10;
-        darkeningValueHistory = @.4;
-        saturationValueHistory = @1.2;
+        blurValue = blurRadius;
+        saturationValue = saturation;
+        notificationCenterColoring = color;
+        colorAlphaValue = colorAlpha;
+        
         [self setDefaultValues];
     }
     return self;
 }
 -(void)setDefaultValues{
     self.appliesTintAndBlurSettings = YES;
-    self.scale = (blurValueHistory.doubleValue >= 5) ? .25 : 1;
+    self.scale = (blurValue >= 5) ? .25 : 1;
     self.usesBackdropEffectView = YES;
     self.backdropVisible = YES;
     self.filterMaskAlpha = 1;
     self.legibleColor = [UIColor whiteColor];
     self.enabled = YES;
     self.usesContentView = YES;
-    self.saturationDeltaFactor = saturationValueHistory.doubleValue;
+    self.saturationDeltaFactor = saturationValue;
     
-    self.blurRadius = blurValueHistory.doubleValue;
+    self.blurRadius = blurValue;
     self.blurQuality = @"default";
     
     self.darkeningTintBrightness = .64;
@@ -47,6 +48,6 @@ static NSString *notifHex;
     self.usesColorTintView = YES;
     self.colorTint = notificationCenterColoring;
     self.colorTintMaskAlpha = 1;
-    self.colorTintAlpha = darkeningValueHistory.doubleValue;
+    self.colorTintAlpha = colorAlphaValue;
 }
 @end
