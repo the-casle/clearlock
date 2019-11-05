@@ -15,7 +15,7 @@
 		<key>isController</key>
 		<true/>
 		<key>label</key>
-		<string>Clear Lock</string>
+		<string>ClearLock</string>
 	</dict>
 </dict>
 </plist>

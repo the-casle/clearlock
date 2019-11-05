@@ -48,6 +48,75 @@
 }
 
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
 
 
+
+    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 180)];
+    self.headerCoverView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 180)];
+    self.headerCoverView.contentMode = UIViewContentModeScaleAspectFill;
+    self.headerCoverView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.headerCoverView.backgroundColor = [UIColor colorWithRed:0.96 green:0.60 blue:0.61 alpha:1.0];
+    [self.headerView addSubview:self.headerCoverView];
+
+
+//         UIImage *eyeImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/InstallerPrefs.bundle/installer.png"];
+//  CGFloat width = [UIScreen mainScreen].bounds.size.width;
+//         self.headerImage = [[UIImageView alloc] initWithFrame:CGRectMake( ((width/2) - 75),(18),(150),(150))];
+//         self.headerImage.image = eyeImage;
+
+
+//         [self.headerView addSubview: self.headerImage];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [self.headerCoverView.topAnchor constraintEqualToAnchor:self.headerView.topAnchor],
+        [self.headerCoverView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
+        [self.headerCoverView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],
+        [self.headerCoverView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
+    ]];
+
+
+
+
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    CGRect frame = self.table.bounds;
+    frame.origin.y = -frame.size.height;
+
+
+    self.navigationController.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0.96 green:0.60 blue:0.61 alpha:1.0];
+    [self.navigationController.navigationController.navigationBar setShadowImage: [UIImage new]];
+    self.navigationController.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationController.navigationBar.translucent = NO;
+
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    tableView.tableHeaderView = self.headerView;
+	
+	tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    return [super tableView:tableView cellForRowAtIndexPath:indexPath];
+
+
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat offsetY = scrollView.contentOffset.y;
+
+    if (offsetY > 100) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.iconView.alpha = 0.0;
+        }];
+    } else {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.iconView.alpha = 1.0;
+        }];
+    }
+    
+    if (offsetY > 0) offsetY = 0;
+    self.headerCoverView.frame = CGRectMake(0, offsetY, self.headerView.frame.size.width, 180 - offsetY);
+}
 @end
