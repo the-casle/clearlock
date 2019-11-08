@@ -115,6 +115,23 @@ static BOOL flyInDisabled;
     if(flyInDisabled) %orig(NO); // MAKE THIS LIVE UPDATE
     else %orig;
 }
+
+-(void)setDefaultValues{
+    %orig;
+    //self.blurRadius = 0;
+}
+%end
+
+%hook SBCoverSheetPositionView
+-(CGRect)positionContentForTouchAtLocation:(CGPoint)point withTransformMode:(long long)arg2 forPresentationValue:(BOOL)arg3{
+    NSLog(@"clearLock | point: %f", point.y);
+    SBLockScreenManager *lockManager = [%c(SBLockScreenManager) sharedInstance];
+    UIView *view = lockManager.dashBoardViewController.view;
+    CGFloat screenHeight = UIScreen.mainScreen.bounds.size.height;
+    CGFloat touchHeight = point.y;
+    view.alpha = (touchHeight / screenHeight);
+    return CGRectMake(0,0,0,0);
+}
 %end
 
 void readPreferences(){
