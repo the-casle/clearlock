@@ -97,6 +97,8 @@
             <string>kHistoryBlur</string>
             <key>showValue</key>
             <true/>
+            <key>default</key>
+            <real>10</real>
             <key>min</key>
             <real>0</real>
             <key>max</key>
@@ -121,6 +123,8 @@
             <string>kLockBlur</string>
             <key>showValue</key>
             <true/>
+            <key>default</key>
+            <real>10</real>
             <key>min</key>
             <real>0</real>
             <key>max</key>
@@ -145,6 +149,8 @@
             <string>kHistorySaturation</string>
             <key>showValue</key>
             <true/>
+            <key>default</key>
+            <real>12</real>
             <key>min</key>
             <real>0</real>
             <key>max</key>
@@ -169,6 +175,8 @@
             <string>kLockSaturation</string>
             <key>showValue</key>
             <true/>
+            <key>default</key>
+            <real>12</real>
             <key>min</key>
             <real>0</real>
             <key>max</key>
@@ -193,6 +201,8 @@
             <string>kHistoryColorAlpha</string>
             <key>showValue</key>
             <true/>
+            <key>default</key>
+            <real>0</real>
             <key>min</key>
             <real>0</real>
             <key>max</key>
@@ -217,6 +227,8 @@
             <string>kLockColorAlpha</string>
             <key>showValue</key>
             <true/>
+            <key>default</key>
+            <real>0</real>
             <key>min</key>
             <real>0</real>
             <key>max</key>
