@@ -9,6 +9,8 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Settings</string>
+            <key>footerText</key>
+            <string>Always Blur: Will blur even if no notifications are present. Recommended if any of the transparency options are enabled.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -40,7 +42,35 @@
             <key>id</key>
             <string>idClearLockscreen</string>
             <key>label</key>
-            <string>Lock Transparency</string>
+            <string>Lockscreen Transparency</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true/>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>key</key>
+            <string>kEnableBlurLock</string>
+            <key>label</key>
+            <string>Lock Blur</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true/>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>key</key>
+            <string>kEnableBlurHistory</string>
+            <key>label</key>
+            <string>History Blur</string>
         </dict>
         <dict>
             <key>cell</key>
@@ -54,7 +84,15 @@
             <key>key</key>
             <string>kAlwaysLockBlur</string>
             <key>label</key>
-            <string>Always Blur Lockscreen</string>
+            <string>Always Blur</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Animations</string>
+            <key>footerText</key>
+            <string>Icon Fly In: Only certain devices, icons fly in from outer edges of screen when unlocking. This disables the animation.</string>
         </dict>
         <dict>
             <key>cell</key>
@@ -66,9 +104,9 @@
             <key>PostNotification</key>
             <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
             <key>key</key>
-            <string>kAlwaysNCBlur</string>
+            <string>kFadeUnlock</string>
             <key>label</key>
-            <string>Always Blur Notification Center</string>
+            <string>Fade Animation</string>
         </dict>
         <dict>
             <key>cell</key>
@@ -82,57 +120,13 @@
             <key>key</key>
             <string>kFlyInDisabled</string>
             <key>label</key>
-            <string>Disable Icon Flyin</string>
-        </dict>
-        <dict>
-            <key>cell</key>
-            <string>PSSwitchCell</string>
-            <key>default</key>
-            <true/>
-            <key>defaults</key>
-            <string>com.thecasle.clearlockprefs</string>
-            <key>PostNotification</key>
-            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
-            <key>id</key>
-            <string>yayEEt</string>
-            <key>key</key>
-            <string>kSplitCustomo</string>
-            <key>label</key>
-            <string>Seperate Lockscreen from N</string>
+            <string>Disable Icon Fly In</string>
         </dict>
         <dict>
             <key>cell</key>
             <string>PSGroupCell</string>
             <key>label</key>
-            <string>History Blur</string>
-        </dict>
-        <dict>
-            <key>cell</key>
-            <string>PSSliderCell</string>
-            <key>defaults</key>
-            <string>com.thecasle.clearlockprefs</string>
-            <key>PostNotification</key>
-            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
-            <key>key</key>
-            <string>kHistoryBlur</string>
-            <key>showValue</key>
-            <true/>
-            <key>id</key>
-            <string>idHistoryBlur</string>
-            <key>default</key>
-            <real>10</real>
-            <key>min</key>
-            <real>0</real>
-            <key>max</key>
-            <real>60</real>
-            <key>isSegmented</key>
-            <false/>
-        </dict>
-        <dict>
-            <key>cell</key>
-            <string>PSGroupCell</string>
-            <key>label</key>
-            <string>Lock Blur</string>
+            <string>Blur Radius</string>
         </dict>
         <dict>
             <key>cell</key>
@@ -158,33 +152,7 @@
             <key>cell</key>
             <string>PSGroupCell</string>
             <key>label</key>
-            <string>History Saturation</string>
-        </dict>
-        <dict>
-            <key>cell</key>
-            <string>PSSliderCell</string>
-            <key>defaults</key>
-            <string>com.thecasle.clearlockprefs</string>
-            <key>PostNotification</key>
-            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
-            <key>key</key>
-            <string>kHistorySaturation</string>
-            <key>showValue</key>
-            <true/>
-            <key>default</key>
-            <real>12</real>
-            <key>min</key>
-            <real>0</real>
-            <key>max</key>
-            <real>30</real>
-            <key>isSegmented</key>
-            <false/>
-        </dict>
-        <dict>
-            <key>cell</key>
-            <string>PSGroupCell</string>
-            <key>label</key>
-            <string>Lock Saturation</string>
+            <string>Saturation</string>
         </dict>
         <dict>
             <key>cell</key>
@@ -210,33 +178,7 @@
             <key>cell</key>
             <string>PSGroupCell</string>
             <key>label</key>
-            <string>History Color Alpha</string>
-        </dict>
-        <dict>
-            <key>cell</key>
-            <string>PSSliderCell</string>
-            <key>defaults</key>
-            <string>com.thecasle.clearlockprefs</string>
-            <key>PostNotification</key>
-            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
-            <key>key</key>
-            <string>kHistoryColorAlpha</string>
-            <key>showValue</key>
-            <true/>
-            <key>default</key>
-            <real>0</real>
-            <key>min</key>
-            <real>0</real>
-            <key>max</key>
-            <real>1</real>
-            <key>isSegmented</key>
-            <false/>
-        </dict>
-        <dict>
-            <key>cell</key>
-            <string>PSGroupCell</string>
-            <key>label</key>
-            <string>Lock Color Alpha</string>
+            <string>Darkening Alpha</string>
         </dict>
         <dict>
             <key>cell</key>

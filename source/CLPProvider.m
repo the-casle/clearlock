@@ -10,14 +10,13 @@
                                         @"kTransparency": @YES,
                                         @"kClearLockscreen": @YES,
                                         @"kAlwaysLockBlur": @YES,
-                                        @"kAlwaysNCBlur": @YES,
                                         @"kFlyInDisabled": @YES,
-                                        @"kHistoryBlur": @10,
                                         @"kLockBlur": @10,
-                                        @"kHistorySaturation": @12,
                                         @"kLockSaturation": @12,
-                                        @"kHistoryColorAlpha": @0,
-                                        @"kLockColorAlpha": @0
+                                        @"kLockColorAlpha": @0,
+                                        @"kFadeUnlock": @YES,
+                                        @"kEnableBlurLock": @YES,
+                                        @"kEnableBlurHistory": @YES
                                         }];
     });
     return sharedProvider;

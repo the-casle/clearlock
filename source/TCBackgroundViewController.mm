@@ -9,17 +9,14 @@
 @import LocalAuthentication;
 
 static BOOL alwaysLockBlurEnabled;
-static BOOL alwaysNCBlurEnabled;
 static BOOL isClearLockscreen;
 static BOOL isClear;
+static BOOL enableBlurLock;
+static BOOL enableBlurHistory;
 
-static double historyBlur;
 static double lockBlur;
-static double historySaturation;
 static double lockSaturation;
-static double historyColorAlpha;
 static double lockColorAlpha;
-static UIColor *historyColor = [UIColor blackColor];
 static UIColor *lockColor = [UIColor blackColor];
 
 //----------------------------------------------------------------
@@ -29,15 +26,13 @@ extern BOOL isUILocked();
 
 void registerPreferences(){
     alwaysLockBlurEnabled = [prefs boolForKey:@"kAlwaysLockBlur"];
-    alwaysNCBlurEnabled = [prefs boolForKey:@"kAlwaysNCBlur"];
     isClearLockscreen = [prefs boolForKey:@"kClearLockscreen"];
     isClear = [prefs boolForKey:@"kTransparency"];
+    enableBlurLock = [prefs boolForKey:@"kEnableBlurLock"];
+    enableBlurHistory = [prefs boolForKey:@"kEnableBlurHistory"];
     
-    historyBlur = [prefs doubleForKey:@"kHistoryBlur"];
     lockBlur = [prefs doubleForKey:@"kLockBlur"];
-    historySaturation = [prefs doubleForKey:@"kHistorySaturation"];
     lockSaturation = [prefs doubleForKey:@"kLockSaturation"];
-    historyColorAlpha = [prefs doubleForKey:@"kHistoryColorAlpha"];
     lockColorAlpha = [prefs doubleForKey:@"kLockColorAlpha"];
 }
 
@@ -63,15 +58,16 @@ uint32_t status = notify_register_dispatch("com.thecasle.clearlockprefs/ReloadPr
         // NC blur
         if(!self.blurHistoryEffectView){
             // The BSUIBackdropView has so much customization its a little insane. Sort of unusual way to implement however.
-            _UIBackdropViewSettings *settings = [[objc_getClass("_UIBackdropViewSettingsDynamic") alloc] initWithBlur: historyBlur
-                                                                                                           saturation: (historySaturation * 0.1)
-                                                                                                                color: historyColor
-                                                                                                           colorAlpha: historyColorAlpha];
+            _UIBackdropViewSettings *settings = [[objc_getClass("_UIBackdropViewSettingsDynamic") alloc] initWithBlur: lockBlur
+                                                                                                           saturation: (lockSaturation * 0.1)
+                                                                                                                color: lockColor
+                                                                                                           colorAlpha: lockColorAlpha];
             self.blurHistoryEffectView = [[objc_getClass("BSUIBackdropView") alloc] initWithSettings:settings];
             
             self.blurHistoryEffectView.frame = screenFrame;
             self.blurHistoryEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             [self.view addSubview:self.blurHistoryEffectView];
+            if(!enableBlurHistory) self.blurHistoryEffectView.hidden = YES;
         }
         
         // lockscreen blur
@@ -85,6 +81,7 @@ uint32_t status = notify_register_dispatch("com.thecasle.clearlockprefs/ReloadPr
             self.blurEffectView = [[objc_getClass("BSUIBackdropView") alloc] initWithSettings:settings];
             self.blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             [self.view addSubview:self.blurEffectView];
+            if(!enableBlurLock) self.blurEffectView.hidden = YES;
         }
         
         if(!self.snapshotImageView){
@@ -147,7 +144,7 @@ uint32_t status = notify_register_dispatch("com.thecasle.clearlockprefs/ReloadPr
 -(void) updateWithContent: (BOOL)content isHistoryRevealed: (BOOL)isHistoryRevealed {
     
     // forces the blur always enabled
-    if((alwaysLockBlurEnabled && isOnLockscreen()) || (alwaysNCBlurEnabled && !isOnLockscreen())){
+    if(alwaysLockBlurEnabled){
         content = YES;
     }
     if(isOnLockscreen()){

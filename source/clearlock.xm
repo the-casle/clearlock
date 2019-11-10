@@ -12,6 +12,7 @@ static id _container;
 static BOOL isClearLockscreen;
 static BOOL isClear;
 static BOOL flyInDisabled;
+static BOOL fadeUnlock;
 
 %hook SBCoverSheetUnlockedEnvironmentHostingWindow
 -(void)setHidden:(BOOL)arg1 {
@@ -124,13 +125,16 @@ static BOOL flyInDisabled;
 
 %hook SBCoverSheetPositionView
 -(CGRect)positionContentForTouchAtLocation:(CGPoint)point withTransformMode:(long long)arg2 forPresentationValue:(BOOL)arg3{
-    NSLog(@"clearLock | point: %f", point.y);
-    SBLockScreenManager *lockManager = [%c(SBLockScreenManager) sharedInstance];
-    UIView *view = lockManager.dashBoardViewController.view;
-    CGFloat screenHeight = UIScreen.mainScreen.bounds.size.height;
-    CGFloat touchHeight = point.y;
-    view.alpha = (touchHeight / screenHeight);
-    return CGRectMake(0,0,0,0);
+    if(fadeUnlock){
+        SBLockScreenManager *lockManager = [%c(SBLockScreenManager) sharedInstance];
+        UIView *view = lockManager.dashBoardViewController.view;
+        CGFloat screenHeight = UIScreen.mainScreen.bounds.size.height;
+        CGFloat touchHeight = point.y;
+        view.alpha = (touchHeight / screenHeight);
+        return CGRectMake(0,0,0,0);
+    } else {
+        return %orig;
+    }
 }
 %end
 
@@ -138,6 +142,7 @@ void readPreferences(){
     isClearLockscreen = [prefs boolForKey:@"kClearLockscreen"];
     isClear = [prefs boolForKey:@"kTransparency"];
     flyInDisabled = [prefs boolForKey:@"kFlyInDisabled"];
+    fadeUnlock = [prefs boolForKey:@"kFadeUnlock"];
 }
 
 %ctor{
