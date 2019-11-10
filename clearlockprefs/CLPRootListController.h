@@ -9,4 +9,6 @@
 
 @property (nonatomic, retain) UIImageView *headerImageView;
 
+@property (nonatomic, retain) NSMutableArray<PSSpecifier *> *hiddenSpecifiers;
+
 @end

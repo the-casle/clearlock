@@ -21,6 +21,8 @@
             <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
 			<key>key</key>
 			<string>kTransparency</string>
+            <key>id</key>
+            <string>idTransparency</string>
 			<key>label</key>
 			<string>Transparency</string>
 		</dict>
@@ -35,6 +37,8 @@
             <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
             <key>key</key>
             <string>kClearLockscreen</string>
+            <key>id</key>
+            <string>idClearLockscreen</string>
             <key>label</key>
             <string>Lock Transparency</string>
         </dict>
@@ -82,6 +86,22 @@
         </dict>
         <dict>
             <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true/>
+            <key>defaults</key>
+            <string>com.thecasle.clearlockprefs</string>
+            <key>PostNotification</key>
+            <string>com.thecasle.clearlockprefs/ReloadPrefs</string>
+            <key>id</key>
+            <string>yayEEt</string>
+            <key>key</key>
+            <string>kSplitCustomo</string>
+            <key>label</key>
+            <string>Seperate Lockscreen from N</string>
+        </dict>
+        <dict>
+            <key>cell</key>
             <string>PSGroupCell</string>
             <key>label</key>
             <string>History Blur</string>
@@ -97,6 +117,8 @@
             <string>kHistoryBlur</string>
             <key>showValue</key>
             <true/>
+            <key>id</key>
+            <string>idHistoryBlur</string>
             <key>default</key>
             <real>10</real>
             <key>min</key>

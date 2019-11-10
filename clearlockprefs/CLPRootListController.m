@@ -4,6 +4,10 @@
 #import <Cephei/HBPreferences.h>
 #include <spawn.h>
 
+@interface PSSpecifier
+-(id)propertyForKey:(id)arg1 ;
+@property (nonatomic,retain) NSArray * values;
+@end
 
 @implementation CLPRootListController
 
@@ -33,6 +37,8 @@
 
         self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
         self.iconView.alpha = 1.0;
+        
+        self.hiddenSpecifiers = [[NSMutableArray alloc] init];
     }
 
     return self;
@@ -42,7 +48,18 @@
 - (NSArray *)specifiers {
 	if (!_specifiers) {
 		_specifiers = [[self loadSpecifiersFromPlistName:@"Root" target:self] retain];
-	}
+
+        PSSpecifier *managerSwitch = [self specifierForID:@"idTransparency"];
+        if(!((NSNumber *)[self readPreferenceValue:managerSwitch]).boolValue){
+            for(PSSpecifier *specifier in _specifiers){
+                if([[specifier propertyForKey:@"id"] isEqualToString:@"idClearLockscreen"]){
+                    [self.hiddenSpecifiers addObject:specifier];
+                    [self removeSpecifier:specifier animated:YES];
+                }
+            }
+        }
+        
+    }
 
 	return _specifiers;
 }
@@ -118,5 +135,23 @@
     
     if (offsetY > 0) offsetY = 0;
     self.headerCoverView.frame = CGRectMake(0, offsetY, self.headerView.frame.size.width, 180 - offsetY);
+}
+-(void)setPreferenceValue:(id)arg1 specifier:(PSSpecifier *)specifier{
+    [super setPreferenceValue:arg1 specifier: specifier];
+
+    if([[specifier propertyForKey:@"id"] isEqualToString:@"idTransparency"]){
+        BOOL value = ((NSNumber *)arg1).boolValue;
+        if(value){
+            PSSpecifier *hiddenSpecifier = nil;
+            for(PSSpecifier *specifier in self.hiddenSpecifiers){
+                if([[specifier propertyForKey:@"id"] isEqualToString:@"idClearLockscreen"]) hiddenSpecifier = specifier;
+            }
+            [self insertSpecifier:hiddenSpecifier afterSpecifierID:@"idTransparency" animated:YES];
+        } else {
+            PSSpecifier *specifier = [self specifierForID:@"idClearLockscreen"];
+            [self.hiddenSpecifiers addObject:specifier];
+            [self removeSpecifier:specifier animated:YES];
+        }
+    }
 }
 @end
