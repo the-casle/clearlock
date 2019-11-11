@@ -200,6 +200,28 @@
             <key>isSegmented</key>
             <false/>
         </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Credits</string>
+        </dict>
+        <dict>
+            <key>cellClass</key>
+            <string>HBTwitterCell</string>
+            <key>label</key>
+            <string>Dave van Wijk</string>
+            <key>user</key>
+            <string>DaveWijk</string>
+        </dict>
+        <dict>
+            <key>cellClass</key>
+            <string>HBTwitterCell</string>
+            <key>label</key>
+            <string>DGh0st</string>
+            <key>user</key>
+            <string>D_Gh0st</string>
+        </dict>
 	</array>
 	<key>title</key>
 	<string>Clear Lock</string>
